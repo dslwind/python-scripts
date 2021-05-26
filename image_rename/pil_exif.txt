@@ -1,0 +1,5 @@
+import PIL.Image img = PIL.Image.open('img.jpg') exif_data = img._getexif()
+
+This should give you a dictionary indexed by EXIF numeric tags. If you want the dictionary indexed by the actual EXIF tag name strings, try something like:
+
+import PIL.ExifTags exif = { PIL.ExifTags.TAGS[k]: v for k, v in img._getexif().items() if k in PIL.ExifTags.TAGS }
