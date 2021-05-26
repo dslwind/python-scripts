@@ -1,7 +1,7 @@
 from PIL import ExifTags
 from PIL import Image
 
-img = Image.open('PIC_20160211_085146_C6D.jpg')
+img = Image.open('test.jpg')
 
 
 def read_exif(img):

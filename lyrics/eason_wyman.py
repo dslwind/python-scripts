@@ -6,18 +6,18 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 
-proxy = {
-    'http': 'http://127.0.0.1:1080',
-    'https': 'https://127.0.0.1:1080'
-}
+proxy = {'http': 'http://127.0.0.1:1080', 'https': 'https://127.0.0.1:1080'}
 
 host = 'https://mojim.com'
-singer_urls = {'http://mojim.com/cnh100111-A1.htm',
-               'http://mojim.com/cnh100111-A1-1.htm'}
+singer_urls = {
+    'http://mojim.com/cnh100111-A1.htm', 'http://mojim.com/cnh100111-A1-1.htm'
+}
 lyricist = '黄伟文'
 song_names = set([])
-rub = ['<br/>', '\n', '更多更详尽歌词 在 ※ Mojim.com\u3000魔镜歌词网 ',
-       '<dt class="fsZx2" id="fsZx2">\n</dt>', '<ol><li>\n</li></ol>', '\n陈奕迅\n']
+rub = [
+    '<br/>', '\n', '更多更详尽歌词 在 ※ Mojim.com\u3000魔镜歌词网 ',
+    '<dt class="fsZx2" id="fsZx2">\n</dt>', '<ol><li>\n</li></ol>', '\n陈奕迅\n'
+]
 
 f = open('eason_wyman.txt', 'w', encoding='utf8')
 
@@ -37,8 +37,9 @@ for singer_url in singer_urls:
         data = req.text
         soup = BeautifulSoup(data, "html.parser")
 
-        song_name = soup.find(text=re.compile("var songname")).string.split(';')[
-            0].replace('var songname=', '').replace('\"', '')
+        song_name = soup.find(
+            text=re.compile("var songname")).string.split(';')[0].replace(
+                'var songname=', '').replace('\"', '')
         if song_name in song_names:
             continue
         song_names.add(song_name)

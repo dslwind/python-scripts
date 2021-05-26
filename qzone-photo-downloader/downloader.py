@@ -9,7 +9,7 @@ import requests
 from selenium import webdriver
 
 # import qzone_login
-from io_in_out import *
+from .io_in_out import *
 
 curpath = os.path.dirname(os.path.realpath(__file__))
 curpath = io_in_arg(curpath)
@@ -63,10 +63,11 @@ def func_save_photo(arg):
 
     fn = u'{0}_{1}.jpeg'.format(index, photo.name)
 
-    print("正在下载相册 {0} 的第 {1} 张图片".format(album_name, index+1))
+    print("正在下载相册 {0} 的第 {1} 张图片".format(album_name, index + 1))
 
-    def _func_replace_os_path_sep(x): return x.replace(
-        u'/', u'_').replace(u'\\', u'_')
+    def _func_replace_os_path_sep(x):
+        return x.replace(u'/', u'_').replace(u'\\', u'_')
+
     fn = _func_replace_os_path_sep(fn)
     c_p = os.path.join(dest_path, fn)
     if not io_is_path_valid(c_p):
@@ -84,7 +85,8 @@ def func_save_photo(arg):
         try:
             req = func_save_photo_net_helper(session, url, timeout)
             break
-        except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
+        except (requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError):
             attempts += 1
             timeout += 5
     else:
@@ -114,14 +116,16 @@ class QzonePhotoManager(object):
     albumbase_v3 = (
         'https://h5.qzone.qq.com/proxy/domain/tjalist.photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3?'
         'g_tk={gtk}&t={t}&hostUin={dest_user}&uin={user}'
-        '&appid=4&inCharset=gbk&outCharset=gbk&source=qzone&plat=qzone&format=jsonp&callbackFun=&mode=3')
+        '&appid=4&inCharset=gbk&outCharset=gbk&source=qzone&plat=qzone&format=jsonp&callbackFun=&mode=3'
+    )
 
     # 不是原图质量
-    photobase_v3 = ('https://h5.qzone.qq.com/proxy/domain/tjplist.photo.qzone.qq.com/fcgi-bin/'
-                    'cgi_list_photo?g_tk={gtk}&t={t}&mode=0&idcNum=5&hostUin={dest_user}'
-                    '&topicId={album_id}&noTopic=0&uin={user}&pageStart=0&pageNum=9000'
-                    '&inCharset=gbk&outCharset=gbk'
-                    '&source=qzone&plat=qzone&outstyle=json&format=jsonp&json_esc=1')
+    photobase_v3 = (
+        'https://h5.qzone.qq.com/proxy/domain/tjplist.photo.qzone.qq.com/fcgi-bin/'
+        'cgi_list_photo?g_tk={gtk}&t={t}&mode=0&idcNum=5&hostUin={dest_user}'
+        '&topicId={album_id}&noTopic=0&uin={user}&pageStart=0&pageNum=9000'
+        '&inCharset=gbk&outCharset=gbk'
+        '&source=qzone&plat=qzone&outstyle=json&format=jsonp&json_esc=1')
 
     def __init__(self, user, password):
         self.user = user
@@ -237,8 +241,9 @@ class QzonePhotoManager(object):
                 for j in c['data']['albumListModeClass']:
                     if 'albumList' in j:
                         for i in j['albumList']:
-                            albums.append(QzoneAlbum._make(
-                                [i['id'], i['name'], i['total']]))
+                            albums.append(
+                                QzoneAlbum._make(
+                                    [i['id'], i['name'], i['total']]))
         # print(albums)
         return albums
 
@@ -246,12 +251,11 @@ class QzonePhotoManager(object):
         import json
 
         photos = []
-        url = self.photobase_v3.format(
-            gtk=self.qzone_g_tk,
-            t=random.Random().random(),
-            dest_user=dest_user,
-            user=self.user,
-            album_id=album.uid)
+        url = self.photobase_v3.format(gtk=self.qzone_g_tk,
+                                       t=random.Random().random(),
+                                       dest_user=dest_user,
+                                       user=self.user,
+                                       album_id=album.uid)
         # print(url)
         c = self.access_net_v3(url, timeout=10)
         # print(c)
@@ -264,36 +268,36 @@ class QzonePhotoManager(object):
                 # 先看是否存在原图
                 # get picKey(=lloc)
                 if photolist and 'lloc' in photolist[0]:
-                    p = self.get_raw_photos_by_album(
-                        dest_user, album, photolist[0]['lloc'])
+                    p = self.get_raw_photos_by_album(dest_user, album,
+                                                     photolist[0]['lloc'])
                     if p:
                         return p
                 for i in photolist:
-                    pic_url = (
-                        'origin_url' in i and i['origin_url'] or i['url'])
-                    photos.append(QzonePhoto._make([
-                        pic_url, i['name'], album
-                    ]))
+                    pic_url = ('origin_url' in i and i['origin_url']
+                               or i['url'])
+                    photos.append(QzonePhoto._make([pic_url, i['name'],
+                                                    album]))
         return photos
 
     def get_raw_photos_by_album(self, dest_user, album, pic_key):
         import json
 
-        url_raw_photo_base = ('https://h5.qzone.qq.com/proxy/domain/tjplist.photo.qq.com/fcgi-bin/'
-                              'cgi_floatview_photo_list_v2?'
-                              'g_tk={gtk}&t={t}&topicId={album_id}&picKey={pic_key}'
-                              '&shootTime=&cmtOrder=1&fupdate=1&plat=qzone&source=qzone'
-                              '&cmtNum=10&inCharset=utf-8&outCharset=utf-8'
-                              '&offset=0&uin={user}&appid=4&isFirst=1&hostUin={dest_user}&postNum=9999')
+        url_raw_photo_base = (
+            'https://h5.qzone.qq.com/proxy/domain/tjplist.photo.qq.com/fcgi-bin/'
+            'cgi_floatview_photo_list_v2?'
+            'g_tk={gtk}&t={t}&topicId={album_id}&picKey={pic_key}'
+            '&shootTime=&cmtOrder=1&fupdate=1&plat=qzone&source=qzone'
+            '&cmtNum=10&inCharset=utf-8&outCharset=utf-8'
+            '&offset=0&uin={user}&appid=4&isFirst=1&hostUin={dest_user}&postNum=9999'
+        )
 
         photos = []
-        url = url_raw_photo_base.format(
-            gtk=self.qzone_g_tk,
-            t=random.Random().random(),
-            dest_user=dest_user,
-            user=self.user,
-            album_id=album.uid,
-            pic_key=pic_key)
+        url = url_raw_photo_base.format(gtk=self.qzone_g_tk,
+                                        t=random.Random().random(),
+                                        dest_user=dest_user,
+                                        user=self.user,
+                                        album_id=album.uid,
+                                        pic_key=pic_key)
 
         c = self.access_net_v3(url, timeout=10)
         if c:
@@ -301,11 +305,9 @@ class QzonePhotoManager(object):
             if 'data' in c and 'photos' in c['data']:
                 for i in c['data']['photos']:
                     pic_url = ('raw' in i and i['raw']
-                               or 'origin' in i and i['origin']
-                               or i['url'])
-                    photos.append(QzonePhoto._make([
-                        pic_url, i['name'], album
-                    ]))
+                               or 'origin' in i and i['origin'] or i['url'])
+                    photos.append(QzonePhoto._make([pic_url, i['name'],
+                                                    album]))
         return photos
 
     def get_photos_v3(self, dest_user):
@@ -353,7 +355,9 @@ def entry():
     main_pass = ''
 
     # 要处理的目标 QQ 号，此处可填入多个QQ号，中间用逗号隔开
-    dest_users = [1522293918, ]
+    dest_users = [
+        1522293918,
+    ]
 
     a = QzonePhotoManager(main_user, main_pass)
     io_print(u'登录成功')

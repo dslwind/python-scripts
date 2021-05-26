@@ -13,7 +13,7 @@ import sys
 
 pyver = sys.version_info[0]  # major
 if pyver >= 3:
-    io_in_code = str # io 读取时应该转换成为的目标编码
+    io_in_code = str  # io 读取时应该转换成为的目标编码
     io_out_code = bytes
     io_raw_input = input
 else:
@@ -88,7 +88,8 @@ def io_out_arg(arg):
 
 
 def io_sys_stdout(arg):
-    io_conv_func = lambda e: io_out_arg(e) if isinstance(e, io_str_codes) else str(e)
+    io_conv_func = lambda e: io_out_arg(e) if isinstance(e, io_str_codes
+                                                         ) else str(e)
     if isinstance(arg, (tuple, list, dict)):
         x = map(io_conv_func, arg)
         arg = '\t'.join(x)
@@ -101,7 +102,7 @@ def io_sys_stdout(arg):
 
 def io_print(arg):
     io_sys_stdout(arg)
-    print ('')
+    print('')
     sys.stdout.flush()
 
 
@@ -142,7 +143,8 @@ def io_is_path_valid(pathname):
     ERROR_INVALID_NAME = 123
     try:
         _, pathname = os.path.splitdrive(pathname)
-        root_dirname = os.environ.get('HOMEDRIVE', 'C:') if sys.platform == 'win32' else os.path.sep
+        root_dirname = os.environ.get(
+            'HOMEDRIVE', 'C:') if sys.platform == 'win32' else os.path.sep
         root_dirname = root_dirname.rstrip(os.path.sep) + os.path.sep
 
         for pathname_part in pathname.split(os.path.sep):

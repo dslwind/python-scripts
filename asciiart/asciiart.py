@@ -55,7 +55,7 @@ def handle_image_conversion(image_filepath, new_width=30):
     image_ascii = convert_image_to_ascii(
         image, new_width)  # 调用上面的convert_image_to_ascii()函数
     # print(image_ascii)  # 输出字符画
-    with open('ha.txt', 'w') as f:
+    with open('test.txt', 'w') as f:
         f.write(image_ascii)
 
 
