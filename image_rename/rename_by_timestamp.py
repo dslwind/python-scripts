@@ -19,4 +19,3 @@ for filename in os.listdir('.'):
             new_name = 'IMG_' + \
                 timestamp_to_date(int(filename[:-5])/1000) + filename[-8:]
             os.rename(filename, new_name)
-

@@ -13,8 +13,7 @@ def getExif(filename):
         img = Image.open(f)
         tags = {
             ExifTags.TAGS[k]: v
-            for k, v in img._getexif().items()
-            if k in ExifTags.TAGS
+            for k, v in img._getexif().items() if k in ExifTags.TAGS
         }
 
     FIELD0 = 'DateTime'
@@ -28,7 +27,7 @@ def getExif(filename):
             new_name = new_name + tags[FIELD2]
 
         tot = 1
-        while os.path.exists(new_name+file_ext):
+        while os.path.exists(new_name + file_ext):
             if tot == 1:
                 new_name = new_name + '-' + str(tot)
             else:
@@ -43,8 +42,9 @@ def getExif(filename):
         new_name = 'IMG_' + tags[FIELD0].replace(':', '').replace(' ', '_')
 
         tot = 1
-        while os.path.exists(new_name+file_ext):
-            new_name = 'IMG_' + tags[FIELD0].replace(':', '').replace(' ', '_') + '_' + str(tot)
+        while os.path.exists(new_name + file_ext):
+            new_name = 'IMG_' + tags[FIELD0].replace(':', '').replace(
+                ' ', '_') + '_' + str(tot)
             tot += 1
 
         new_name2 = new_name + file_ext
