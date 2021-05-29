@@ -1,3 +1,6 @@
 [submodule "download_links_from_file/qzone-photo-downloader"]
 	path = download_links_from_file/qzone-photo-downloader
 	url = https://github.com/dslwind/qzone-photo-downloader
+[submodule "qzone-photo-downloader"]
+	path = qzone-photo-downloader
+	url = https://github.com/dslwind/qzone-photo-downloader
