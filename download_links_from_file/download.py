@@ -1,12 +1,13 @@
 import requests
+import os
 
-proxies = {'http': 'http://127.0.0.1:1080', 'https': 'https://127.0.0.1:1080'}
+proxies = {'http': 'http://127.0.0.1:7890', 'https': 'https://127.0.0.1:7890'}
 
 with open('a1.txt', 'r') as f:
     for line in f.readlines():
         line = line.strip()
         fn = line.split('/')[-1]
-        fn = os.path.join('dx', fn)
+        fn = os.path.join('test', fn)
 
         if os.path.exists(fn):
             continue
