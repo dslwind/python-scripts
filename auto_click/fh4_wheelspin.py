@@ -21,10 +21,16 @@ def wait_to_click(img):
 
 def main():
     while True:
-        # pyautogui.click(loc_img('1.png'))
-        if loc_img('enter.png'):
-            pyautogui.press('enter')
-        time.sleep(1)
+        for i in range(2):
+            if loc_img('enter.png'):
+                pyautogui.press('enter')
+            time.sleep(0.5)
+        for i in range(3):
+            if loc_img('1.png'):
+                pyautogui.press('down')
+                time.sleep(0.2)
+                pyautogui.press('enter')
+                time.sleep(0.2)
 
 
 if __name__ == '__main__':
